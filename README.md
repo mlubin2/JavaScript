@@ -1,3 +1,3 @@
 # JavaScript
-UFO Search
+UFO Search -
 The Truth is out there!
