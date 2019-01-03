@@ -1,46 +1,98 @@
-// from data.js
-var tableData = data;
+var tbody = document.querySelector("tbody");
+var dateInput = document.querySelector("#datetime");
+var stateInput = document.querySelector("#state");
+var searchBtn = document.querySelector("#filter-btn");
+var cityInput= document.querySelector("#city");
+var countryInput = document.querySelector("#country");
+var shapeInput = document.querySelector("#shape");
 
-// YOUR CODE HERE!
-
-// Select the submit button
-var submit = d3.select("#submit");
-
-submit.on("click", function() {
-
-  // Prevent the page from refreshing
-  d3.event.preventDefault();
-
-  // Select the input element and get the raw HTML node
-  var inputElement = d3.select("#filter-form-input");
-
-  // Get the value property of the input element
-  var inputValue = inputElement.property("value");
-
-  console.log(inputValue);
-  console.log(tableData);
-
-  var filteredData = tableData.filter(event => event.datetime === inputValue);
-
-  console.log(filteredData);
-
-  // BONUS: Calculate summary statistics for the age field of the filtered data
-
-  // First, create an array with just the age values
-  var witness = filteredData.map(person => person.datetime);
-
-  // Next, use math.js to calculate the mean, median, mode, var, and std of the ages
-  var Date = math.count(datetime);
-  // var median = math.median(ages);
-  // var mode = math.mode(ages);
-  // var variance = math.var(ages);
-  // var standardDeviation = math.std(ages);
-
-  // Finally, add the summary stats to the `ul` tag
-   d3.select(".summary")
-     .append("tb").text(`${Date}`)
-  //   .append("li").text(`Median: ${median}`)
-  //   .append("li").text(`Mode: ${mode}`)
-  //   .append("li").text(`Variance: ${variance}`)
-  //   .append("li").text(`Standard Deviation: ${standardDeviation}`);
+// Add an event listener to the searchButton, call handleSearchButtonClick when clicked
+searchBtn.addEventListener("click", function (event) {
+  handleSearchButtonClick(event)
 });
+
+//Assign the data from `data.js` to a descriptive variable
+var filteredUFO = data;
+
+// renderTable renders the filteredUFO to the tbody
+function renderTable() {
+  tbody.innerHTML = "";
+  // console.log("rendering")
+
+  for (var i = 0; i < filteredUFO.length; i++) {
+
+    // Get the current sighting object and its fields
+    var sighting = filteredUFO[i];
+    var fields = Object.keys(sighting);
+    // Create a new row in the tbody, set the index to be i + startingIndex
+    var row = tbody.insertRow(i);
+    for (var j = 0; j < fields.length; j++) {
+      // For every field in the address object, create a new cell at set its inner text to be the current value at the current address's field
+      var field = fields[j];
+      var cell = row.insertCell(j);
+      cell.innerText = sighting[field];
+    }
+  }
+}
+
+function handleSearchButtonClick(event) {
+  event.preventDefault();
+  //Remove spaces, lowercase the input given by the user
+  var filterDate = dateInput.value.trim();
+  var filterState = stateInput.value.trim().toLowerCase();
+  var filterCity = cityInput.value.trim().toLowerCase();
+  var filterCountry = countryInput.value.trim().toLowerCase();
+  var filterShape = shapeInput.value.trim().toLowerCase();
+
+  if (filterDate.length != 0) {
+    filteredUFO = data.filter(function (sighting) {
+      var sightingDate = sighting.datetime;
+      return sightingDate === filterDate;
+    });
+  }
+  else {
+    filteredUFO = data
+  }
+  if (filterState.length != 0) {
+    filteredUFO = filteredUFO.filter(function (sighting) {
+      var sightingState = sighting.state;
+      return sightingState === filterState;
+    });
+  }
+  else {
+    filteredUFO = filteredUFO
+  }
+  if (filterCity.length!=0){
+    filteredUFO = filteredUFO.filter(function(sighting){
+      var sightingCity = sighting.city;
+      return sightingCity === filterCity;
+    });
+  }
+  else {
+    filteredUFO = filteredUFO
+  }
+  if (filterCountry.length!=0){
+    filteredUFO = filteredUFO.filter(function(sighting){
+      var sightingCountry = sighting.country;
+      return sightingCountry === filterCountry;
+    });
+  }
+  else {
+    filteredUFO = filteredUFO
+  }
+  if (filterShape.length!=0){
+    filteredUFO = filteredUFO.filter(function(sighting){
+      var sightingShape = sighting.shape;
+      return sightingShape === filterShape;
+    });
+  }
+  else {
+    filteredUFO = filteredUFO
+  }
+
+  
+  renderTable();
+
+}
+// Render the table for the first time when the page loads
+renderTable();
