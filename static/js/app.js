@@ -6,28 +6,26 @@ var cityInput= document.querySelector("#city");
 var countryInput = document.querySelector("#country");
 var shapeInput = document.querySelector("#shape");
 
-// Add an event listener to the searchButton, call handleSearchButtonClick when clicked
+// add event to the searchButton, call handleSearchButtonClick
 searchBtn.addEventListener("click", function (event) {
   handleSearchButtonClick(event)
 });
 
-//Assign the data from `data.js` to a descriptive variable
 var filteredUFO = data;
 
-// renderTable renders the filteredUFO to the tbody
 function renderTable() {
   tbody.innerHTML = "";
   // console.log("rendering")
 
   for (var i = 0; i < filteredUFO.length; i++) {
 
-    // Get the current sighting object and its fields
+    // get sighting field
     var sighting = filteredUFO[i];
     var fields = Object.keys(sighting);
-    // Create a new row in the tbody, set the index to be i + startingIndex
+    // Create a new row in the tbody
     var row = tbody.insertRow(i);
     for (var j = 0; j < fields.length; j++) {
-      // For every field in the address object, create a new cell at set its inner text to be the current value at the current address's field
+      // create a new cell at set its inner text to be the current value at the current address's field
       var field = fields[j];
       var cell = row.insertCell(j);
       cell.innerText = sighting[field];
@@ -37,7 +35,7 @@ function renderTable() {
 
 function handleSearchButtonClick(event) {
   event.preventDefault();
-  //Remove spaces, lowercase the input given by the user
+  //use .trim to remove spaces and .tolower case
   var filterDate = dateInput.value.trim();
   var filterState = stateInput.value.trim().toLowerCase();
   var filterCity = cityInput.value.trim().toLowerCase();
@@ -94,5 +92,5 @@ function handleSearchButtonClick(event) {
   renderTable();
 
 }
-// Render the table for the first time when the page loads
+// print table
 renderTable();
